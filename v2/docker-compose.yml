@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-alternate
+      args:
+        buildno: 1
+      command: ["python", "app.py"]
+    ports:
+     - "5000:${ENVIRONMENT_VAR}"
+    volumes:
+      - named-volume:/named/volume/here
+    networks:
+      - outside
+      - default
+    restart: on-failure
+  redis:
+    image: "redis:alpine"
+    volumes:
+      - .:/current/directory/here
+    networks:
+      - default
+
+volumes:
+  named-volume:
+  external-volume:
+    external: true
+
+networks:
+  outside:
+    external: true
